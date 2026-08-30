@@ -1,0 +1,95 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>matgen · 材质贴图生成器</title>
+<link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>🧱</text></svg>">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+<header>
+  <h1>🧱 matgen <em>材质贴图生成器</em></h1>
+  <div class="sub">无缝平铺 · PBR 全贴图 · 做旧化 · <b>纯浏览器本地引擎，离线可用</b></div>
+</header>
+<main>
+  <aside id="panel">
+    <section>
+      <h3>材质类型</h3>
+      <div id="mats" class="mats"></div>
+    </section>
+    <section>
+      <h3>预设风格</h3>
+      <select id="preset"></select>
+    </section>
+    <section>
+      <h3>参数</h3>
+      <div id="params"></div>
+    </section>
+    <section class="row2">
+      <div>
+        <h3>分辨率</h3>
+        <select id="size">
+          <option value="256">256 × 256</option>
+          <option value="512" selected>512 × 512</option>
+          <option value="1024">1024 × 1024</option>
+          <option value="2048">2048 × 2048（较慢）</option>
+        </select>
+      </div>
+      <div>
+        <h3>种子</h3>
+        <div class="seedrow">
+          <input id="seed" type="number" min="1" max="9999" placeholder="随机">
+          <button id="randseed" class="mini" title="随机种子">🎲</button>
+        </div>
+      </div>
+    </section>
+    <section>
+      <h3>做旧化</h3>
+      <div id="aging"></div>
+    </section>
+    <button id="gen" class="primary">生成材质</button>
+    <section>
+      <h3>照片 → 材质</h3>
+      <input id="file" type="file" accept="image/*">
+      <div class="hint">实拍照片 / AI 生图 / Poly Haven → 无缝 + PBR，本地上传不出浏览器</div>
+    </section>
+    <button id="zip" disabled>⬇ 下载全套 (ZIP：5 张 PBR + obj/mtl)</button>
+  </aside>
+
+  <section id="stage">
+    <nav id="tabs">
+      <button data-tab="tile" class="on">平铺预览</button>
+      <button data-tab="maps">PBR 通道</button>
+      <button data-tab="3d">3D 光照预览</button>
+    </nav>
+    <div id="tab-tile" class="tab on">
+      <canvas id="tilecv" width="810" height="810"></canvas>
+      <div class="hint">3×3 平铺 —— 看不出接缝即合格</div>
+    </div>
+    <div id="tab-maps" class="tab">
+      <div class="mapbig"><canvas id="bigmap"></canvas></div>
+      <div id="mapstrip"></div>
+    </div>
+    <div id="tab-3d" class="tab">
+      <canvas id="glcv"></canvas>
+      <div class="glrow">
+        <label>平铺 <input id="rep" type="range" min="1" max="8" step="1" value="3"><b id="repv">3</b></label>
+        <label>光源角度 <input id="lang" type="range" min="0" max="360" step="5" value="40"><b id="langv">40</b></label>
+        <label>光源高度 <input id="lhi" type="range" min="0.15" max="3" step="0.05" value="1.2"><b id="lhiv">1.2</b></label>
+      </div>
+      <div class="hint">拖动光源，观察法线 / 粗糙度的真实反应（球体 + 地面同一材质）</div>
+    </div>
+  </section>
+</main>
+<div id="toast"></div>
+<script src="js/noise.js"></script>
+<script src="js/pbr.js"></script>
+<script src="js/aging.js"></script>
+<script src="js/materials.js"></script>
+<script src="js/tileable.js"></script>
+<script src="js/zip.js"></script>
+<script src="js/engine.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
